@@ -16,22 +16,22 @@
       ></el-step>
       <el-step
         title="上传数据"
-        icon="el-icon-edit"
+        icon="el-icon-upload"
         description="上传表格形式的观测数据"
       ></el-step>
       <el-step
         title="选择指标"
-        icon="el-icon-edit"
+        icon="el-icon-s-order"
         description="选择几项用于计算的指标"
       ></el-step>
       <el-step
         title="查看报表"
-        icon="el-icon-edit"
+        icon="el-icon-s-marketing"
         description="以图表形式查看计算结果"
       ></el-step>
       <el-step
         title="结果下载"
-        icon="el-icon-edit"
+        icon="el-icon-download"
         description="将结果保存为本地文件"
       ></el-step>
     </el-steps>
@@ -47,6 +47,7 @@ export default {
     }
   },
   methods: {
+    // 设置每秒调整步骤条
     setStepByTime: function () {
       setInterval(() => {
         if (this.stepActive === 5) {
@@ -80,5 +81,9 @@ export default {
     justify-content: start;
     align-items: start;
     margin-bottom: 20px;
+  }
+  .indexContent span {
+    margin-top: 5px;
+    margin-bottom: 5px;
   }
 </style>

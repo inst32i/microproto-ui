@@ -1,7 +1,7 @@
 <template>
   <el-container id="app">
     <el-header style="padding: 0">
-      <navbar></navbar>
+      <navbar @menuSelect="getMenuIndex"></navbar>
     </el-header>
     <el-main>
       <router-view/>
@@ -21,6 +21,15 @@ export default {
   components: {
     navbar,
     myfooter
+  },
+  methods: {
+    getMenuIndex (data) {
+      if (data) {
+        this.$router.push({
+          name: data
+        })
+      }
+    }
   }
 }
 </script>
