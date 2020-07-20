@@ -6,17 +6,21 @@
     <el-main>
       <router-view/>
     </el-main>
-    <el-footer></el-footer>
+    <el-footer>
+      <myfooter></myfooter>
+    </el-footer>
   </el-container>
 </template>
 
 <script>
 import navbar from './components/navbar'
+import myfooter from './components/myfooter'
 
 export default {
   name: 'App',
   components: {
-    navbar
+    navbar,
+    myfooter
   }
 }
 </script>

@@ -1,13 +1,12 @@
 <template>
   <el-menu
-    default-active="1"
+    default-active="0"
     class="el-menu"
     mode="horizontal"
     background-color="#545c64"
     text-color="#fff"
     active-text-color="#ffd04b"
   >
-
     <el-menu-item index="1">
       <el-image
         style="width: 40px; height: 40px"
