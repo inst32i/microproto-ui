@@ -10,9 +10,10 @@
       <el-upload
         drag
         show-file-list
-        action="http://localhost:5000/zhang"
-        accept="xls,xlsx,xlsm,csv"
-        :before-upload="tryUpload"
+        action=""
+		multiple
+        accept="xls,xlsx,xlsm,csv,mp4"
+        :http-request="fileget"
         class="uploadBox"
       >
         <i class="el-icon-upload"></i>
@@ -37,28 +38,44 @@
     </div>
   </el-card>
 </template>
-
 <script>
+import axios from 'axios'
 export default {
-  name: 'zhang',
+  name: 'upload',
   data () {
     return {
-      calculateLabel: [],
-      checkedLabel: [],
-      fakeLabel: ['UDP流量', 'TCP/IP流量', '磁盘占用率']
+      file:null,
+	  param:null
     }
   },
   methods: {
-    // 上传文件方法，建议使用axios异步解决跨域。file为即将上传的文件
-    tryUpload (file) {
-      // 模拟异步获取标签
-      setTimeout(() => {
-        this.calculateLabel = this.fakeLabel
-      }, 1000)
-    }
+	fileget(e){
+	this.file = e.file;
+	this.param = new FormData();
+	this.param.append('pic_file',this.file, this.file.name);
+	console.log(this.file)
+	axios({
+    method: 'post',
+    url: 'http://127.0.0.1:5000/upload',
+    headers: {'Content-Type': 'multipart/form-data'},
+    data: this.param
+})
+    .then(function (response) {
+        console.log(response);
+    })
+    .catch(function (error) {
+        console.log(error);
+    });
+	}
+   
+  },
+  created () {
+    
   }
 }
+
 </script>
+
 
 <style scoped>
   .zhangTitle {
