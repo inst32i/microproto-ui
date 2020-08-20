@@ -7,22 +7,36 @@
       <span>张氏算法详解</span>
     </div>
     <div class="zhangUpload">
-      <el-upload
-        drag
-        show-file-list
-        action=""
-		multiple
-        accept="xls,xlsx,xlsm,csv,mp4"
-        :http-request="fileget"
-        class="uploadBox"
-      >
-        <i class="el-icon-upload"></i>
-        <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-      </el-upload>
+      <div class="uploadAndButton">
+        <el-upload
+          drag
+          show-file-list
+          action=""
+          multiple
+          accept="xls,xlsx,xlsm,csv,mp4"
+          :http-request="fileget"
+          class="uploadBox"
+        >
+          <i class="el-icon-upload"></i>
+          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+        </el-upload>
+        <div class="buttonBox">
+          <el-button
+            class="caculateBtn"
+            type="primary"
+            v-show="isCalcBtnShow"
+            :disabled="isCalcBtnDisabled"
+            @click="handleCalc"
+          >
+            {{ buttonText }}
+          </el-button>
+        </div>
+      </div>
       <div>
         <el-checkbox-group
           size="medium"
           v-model="checkedLabel"
+          class="labelBox"
         >
           <el-checkbox
             border
@@ -44,38 +58,57 @@ export default {
   name: 'upload',
   data () {
     return {
-      file:null,
-	  param:null
+      file: null,
+	    param: null,
+      calculateLabel: [],
+      checkedLabel: [],
+      buttonText: '计算',
+      isCalcBtnShow: false,
+      isCalcBtnDisabled: false,
+      filePath: ''
     }
   },
   methods: {
-	fileget(e){
-	this.file = e.file;
-	this.param = new FormData();
-	this.param.append('pic_file',this.file, this.file.name);
-	console.log(this.file)
-	axios({
-    method: 'post',
-    url: 'http://127.0.0.1:5000/upload',
-    headers: {'Content-Type': 'multipart/form-data'},
-    data: this.param
-})
-    .then(function (response) {
-        console.log(response);
-    })
-    .catch(function (error) {
-        console.log(error);
-    });
-	}
-   
+    fileget(e){
+      this.file = e.file;
+      this.param = new FormData();
+      this.param.append('pic_file',this.file, this.file.name);
+      // console.log(this.file)
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:5000/upload',
+        headers: {'Content-Type': 'multipart/form-data'},
+        data: this.param
+      }).then((res)=>{
+        // console.log(res)
+        this.filePath = res.data.path
+        this.calculateLabel = res.data.labels
+        this.isCalcBtnShow = true
+      }).catch(function (error) {
+            console.log(error);
+      });
+    },
+    handleCalc () {
+      this.isCalcBtnDisabled = true
+      this.buttonText = '计算中，请稍候...'
+      axios({
+        method: 'post',
+        url: 'http://127.0.0.1:5000/calc',
+        headers: {'Content-Type': 'multipart/form-data'},
+        data: {
+          filePath: this.filePath,
+          checkedLabels: this.checkedLabel
+        }
+      }).then((res)=>{
+        // console.log(res)
+      })
+    }
   },
   created () {
-    
+
   }
 }
-
 </script>
-
 
 <style scoped>
   .zhangTitle {
@@ -97,10 +130,26 @@ export default {
     justify-content: space-between;
     align-items: start;
   }
+  .labelBox {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
   .uploadBox {
     margin-bottom: 20px;
   }
   .calLabel {
-    margin: 0;
+    margin: 10px;
+  }
+  .uploadAndButton {
+    display: flex;
+    flex-direction: row;
+  }
+  .buttonBox {
+    margin: 20px;
+    /*border: 1px solid red;*/
+  }
+  .caculateBtn {
+    margin-top: 120px;
   }
 </style>
