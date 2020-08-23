@@ -101,6 +101,13 @@ export default {
         }
       }).then((res)=>{
         // console.log(res)
+        this.$router.push({
+          name: 'graph',
+          params: {
+            time: res.data.time,
+            value: res.data.value
+          }
+        })
       })
     }
   },
