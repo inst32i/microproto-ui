@@ -1,6 +1,8 @@
 <template>
-  <span>陈氏算法</span>
-</template>
+  <div>
+    <iframe src="http://localhost:8000/" width="80%" height="800px"></iframe>
+  </div>
+  </template>
 
 <script>
 export default {
