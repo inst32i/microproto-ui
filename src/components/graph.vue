@@ -54,8 +54,8 @@ export default {
         }],
         visualMap: [{
           dimension: 1,
-          min: 0,
-          max: 1,
+          min: 1,
+          max: this.$route.params.value ? Math.max(...this.$route.params.value) : 1,
           inRange: {
             color: ['green', 'red']
           }
@@ -96,6 +96,6 @@ export default {
 
 <style scoped>
   .graphCard {
-    width: 50%;
+    width: 900px;
   }
 </style>
