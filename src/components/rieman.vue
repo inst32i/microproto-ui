@@ -87,7 +87,7 @@ export default {
         headers: {'Content-Type': 'multipart/form-data'},
         data: this.param
       }).then((res)=>{
-        // console.log(res)
+        console.log(res)
         this.filePath = res.data.path
         // this.calculateLabel = res.data.labels
         for (let i = 1; i <= res.data.labels.length; i++) {
@@ -96,6 +96,15 @@ export default {
             label: res.data.labels[i - 1],
             disabled: false
           })
+        }
+        for (let i = 1; i <= res.data.selectLabels.length; i++) {
+          let tmpLabel = res.data.selectLabels[i - 1]
+          for (let j = 1; j <= res.data.labels.length; j++) {
+            if (tmpLabel === res.data.labels[j - 1]) {
+              this.checkedLabel.push(j)
+              break
+            }
+          }
         }
         this.isCalcBtnShow = true
       }).catch(function (error) {
