@@ -16,21 +16,33 @@
       ></el-image>
       <span>首页</span>
     </el-menu-item>
-    <el-menu-item index="zhang">
+    <el-menu-item index="rieman">
       <i class="el-icon-menu"></i>
-      <span>张氏算法</span>
-    </el-menu-item>
-    <el-menu-item index="chen">
-      <i class="el-icon-s-promotion"></i>
-      <span>陈氏算法</span>
+      <span>黎曼流形</span>
     </el-menu-item>
     <el-menu-item index="graph">
       <i class="el-icon-s-data"></i>
       <span>图表展示</span>
     </el-menu-item>
-    <el-menu-item index="config">
-      <i class="el-icon-s-tools"></i>
-      <span>参数配置</span>
+    <el-menu-item index="input">
+      <i class="el-icon-s-promotion"></i>
+      <span>输入数据</span>
+    </el-menu-item>
+    <el-menu-item index="templatecreate">
+      <i class="el-icon-s-promotion"></i>
+      <span>创建模板</span>
+    </el-menu-item>
+    <el-menu-item index="manifold">
+      <i class="el-icon-s-promotion"></i>
+      <span>流形计算</span>
+    </el-menu-item>
+    <el-menu-item index="ahp">
+      <i class="el-icon-s-promotion"></i>
+      <span>AHP计算</span>
+    </el-menu-item>
+    <el-menu-item index="d3mhl">
+      <i class="el-icon-s-promotion"></i>
+      <span>多层多维多粒度</span>
     </el-menu-item>
   </el-menu>
 </template>

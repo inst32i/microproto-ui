@@ -1,10 +1,10 @@
 <template>
   <el-card class="el-card">
     <div slot="header" class="zhangTitle">
-      <span>张氏算法</span>
+      <span>黎曼流形计算</span>
     </div>
     <div class="zhangContent">
-      <span>张氏算法详解</span>
+      <span>黎曼流形详解</span>
     </div>
     <div class="zhangUpload">
       <div class="uploadAndButton">

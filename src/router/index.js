@@ -2,10 +2,13 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Index from '@/components/Index'
 import Ping from '@/components/Ping'
-import Zhang from '@/components/zhang'
-import Chen from '@/components/chen'
+import Rieman from '@/components/rieman'
 import Graph from '@/components/graph'
-import Config from '@/components/config'
+import Input from '@/components/input'
+import Templatecreate from '@/components/templatecreate'
+import Manifold from '@/components/manifold'
+import Ahp from '@/components/ahp'
+import D3mhl from '@/components/d3mhl'
 
 Vue.use(Router)
 
@@ -22,14 +25,9 @@ export default new Router({
       component: Ping
     },
     {
-      path: '/zhang',
-      name: 'zhang',
-      component: Zhang
-    },
-    {
-      path: '/chen',
-      name: 'chen',
-      component: Chen
+      path: '/rieman',
+      name: 'rieman',
+      component: Rieman
     },
     {
       path: '/graph',
@@ -37,10 +35,30 @@ export default new Router({
       component: Graph
     },
     {
-      path: '/config',
-      name: 'config',
-      component: Config
-    }
+      path: '/input',
+      name: 'input',
+      component: Input
+    },
+    {
+      path: '/templatecreate',
+      name: 'templatecreate',
+      component: Templatecreate
+    },
+    {
+      path: '/manifold',
+      name: 'manifold',
+      component: Manifold
+    },
+    {
+      path: '/ahp',
+      name: 'ahp',
+      component: Ahp
+    },
+    {
+      path: '/d3mhl',
+      name: 'd3mhl',
+      component: D3mhl
+    },
   ],
   mode: 'history'
 })
