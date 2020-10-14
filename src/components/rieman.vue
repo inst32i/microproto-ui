@@ -87,7 +87,7 @@ export default {
         headers: {'Content-Type': 'multipart/form-data'},
         data: this.param
       }).then((res)=>{
-        console.log(res)
+        // console.log(res)
         this.filePath = res.data.path
         // this.calculateLabel = res.data.labels
         for (let i = 1; i <= res.data.labels.length; i++) {
@@ -129,12 +129,14 @@ export default {
           checkedLabels: axiosLabel
         }
       }).then((res)=>{
-        // console.log(res)
+        console.log(res)
         this.$router.push({
           name: 'graph',
           params: {
             time: res.data.time,
-            value: res.data.value
+            value: res.data.value,
+            ipLoc: res.data.ipLoc,
+            pairs: res.data.pairs
           }
         })
       })
