@@ -74,17 +74,23 @@ export default {
           {
             name: 'IP地址',
             type: 'graph',
-            layout: 'circular',
-            circular: {
-              rotateLabel: true
+            layout: 'force',
+            // circular: {
+            //   rotateLabel: true
+            // },
+            force: {
+              repulsion: 0,
+              gravity: 0,
+              edgeLength: 50
             },
+            symbol: 'image://../../static/btn_host.png',
             data: [],
             links: [],
             roam: true,
             lineStyle: {
               color: 'red',
-              width: 3,
-              opacity: 1
+              width: 2,
+              opacity: 0.3
             }
           }
         ]
@@ -120,24 +126,12 @@ export default {
           this.option2.series[0].data.push({
             id: i,
             name: this.$route.params.ipLoc[i][0],
-            itemStyle: null,
             value: this.$route.params.ipLoc[i][1],
-            symbolSize: 2
+            symbolSize: 15
           })
         }
       }
-      //   console.log(tmpSource)
-      //   console.log(tmpTarget)
-      //   for (let i = 0; i < this.$route.params.pairs.length; i++) {
-      //     links.push({
-      //       id: i,
-      //       name: null,
-      //       source: tmpSource[i],
-      //       target: tmpTarget[i]
-      //     })
-      //   }
-      // }
-      // console.log(links.length)
+
       myChart2.setOption(this.option2)
       if (this.$route.params.pairs) {
         let tmpSource = [], tmpTarget = []
@@ -155,13 +149,13 @@ export default {
               source: tmpSource[Index],
               target: tmpTarget[Index]
             })
-            if (_this.option2.series[0].links.length > 5) {
+            if (_this.option2.series[0].links.length > 10) {
               _this.option2.series[0].links.shift()
             }
             myChart2.setOption(_this.option2)
             Index++
           }
-        }, 1000)
+        }, 200)
       }
     }
   },
