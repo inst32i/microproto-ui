@@ -14,6 +14,7 @@ export default {
   name: 'graph',
   data () {
     return {
+      timeofGraph: 0,
       option1: {
         title: {
           text: '安全度量结果',
@@ -109,6 +110,9 @@ export default {
       myChart1.setOption(this.option1)
       let Index = 10
       let _this = this
+      if (this.$route.params.time) {
+        this.timeofGraph = this.$route.params.time.length * 1000
+      }
       if (this.option1.xAxis.data) {
         setInterval(function () {
           if (Index < _this.$route.params.time.length) {
@@ -121,7 +125,7 @@ export default {
             myChart1.setOption(_this.option1)
             Index++
           }
-        }, 500)
+        }, 1000)
       }
     },
     drawTopology: function () {
@@ -136,7 +140,12 @@ export default {
           })
         }
       }
-
+      // 计算显示间隔
+      let intervalofTopo = 200
+      if (this.$route.params.pairs) {
+        intervalofTopo = Math.round(this.timeofGraph / this.$route.params.pairs.length)
+        console.log(intervalofTopo)
+      }
       myChart2.setOption(this.option2)
       if (this.$route.params.pairs) {
         let tmpSource = [], tmpTarget = []
@@ -160,7 +169,7 @@ export default {
             myChart2.setOption(_this.option2)
             Index++
           }
-        }, 200)
+        }, intervalofTopo)
       }
     }
   },
