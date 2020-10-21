@@ -15,6 +15,9 @@ export default {
   data () {
     return {
       timeofGraph: 0,
+      newRiskValue: 0,
+      newRiskTime: '',
+      newLink: null,
       option1: {
         title: {
           text: '安全度量结果',
@@ -105,48 +108,49 @@ export default {
   },
   methods: {
     drawLine: function () {
+      // 图标初始化
       let myChart1 = this.$echarts.init(document.getElementById('myChart1'))
-      // 绘制图表
       myChart1.setOption(this.option1)
-      let Index = 10
-      let _this = this
+      // 计算图1总时长
       if (this.$route.params.time) {
-        this.timeofGraph = this.$route.params.time.length * 1000
+        this.timeofGraph = this.$route.params.time.length * 2000
       }
+      // 添加新风险值点
       if (this.option1.xAxis.data) {
-        setInterval(function () {
-          if (Index < _this.$route.params.time.length) {
-            _this.option1.xAxis.data.shift()
-            _this.option1.series[0].data.shift()
-            let tmpTime = _this.$route.params.time[Index]
-            let tmpValue = _this.$route.params.value[Index]
-            _this.option1.xAxis.data.push(tmpTime)
-            _this.option1.series[0].data.push(tmpValue)
-            myChart1.setOption(_this.option1)
+        let Index = 0
+        setInterval(() => {
+          if (Index < this.$route.params.time.length) {
+            this.newRiskTime = this.$route.params.time[Index]
+            this.newRiskValue = this.$route.params.value[Index]
+            // 更新图1
+            myChart1.setOption(this.option1)
             Index++
           }
-        }, 1000)
+        }, 2000)
       }
     },
     drawTopology: function () {
+      // 图2初始化
       let myChart2 = this.$echarts.init(document.getElementById('myChart2'))
+      myChart2.setOption(this.option2)
+      // 添加图2点
       if (this.$route.params.ipLoc) {
-        for (let i = 0; i < this.$route.params.ipLoc.length; i++) {
-          this.option2.series[0].data.push({
-            id: i,
-            name: this.$route.params.ipLoc[i][0],
-            value: this.$route.params.ipLoc[i][1],
+        this.option2.series[0].data = this.$route.params.ipLoc.map((item, index) => {
+          return {
+            id: index,
+            name: item[0],
+            value: item[1],
             symbolSize: 8
-          })
-        }
+          }
+        })
       }
-      // 计算显示间隔
+      // 计算图2跳数据间隔
       let intervalofTopo = 200
       if (this.$route.params.pairs) {
         intervalofTopo = Math.round(this.timeofGraph / this.$route.params.pairs.length)
         console.log(intervalofTopo)
       }
-      myChart2.setOption(this.option2)
+      // 添加图2攻击路径
       if (this.$route.params.pairs) {
         let tmpSource = [], tmpTarget = []
         for (let i = 0; i < this.$route.params.pairs.length; i++) {
@@ -154,19 +158,15 @@ export default {
           tmpTarget.push(this.$route.params.pairs[i][1])
         }
         let Index = 0
-        let _this = this
-        setInterval(function () {
-          if (Index < _this.$route.params.pairs.length) {
-            _this.option2.series[0].links.push({
+        setInterval(() => {
+          if (Index < this.$route.params.pairs.length) {
+            this.newLink = {
               id: Index,
               name: null,
               source: tmpSource[Index],
               target: tmpTarget[Index]
-            })
-            if (_this.option2.series[0].links.length > 10) {
-              _this.option2.series[0].links.shift()
             }
-            myChart2.setOption(_this.option2)
+            myChart2.setOption(this.option2)
             Index++
           }
         }, intervalofTopo)
@@ -177,6 +177,29 @@ export default {
     if (this.$route.params) {
       this.drawLine()
       this.drawTopology()
+    }
+  },
+  watch: {
+    newRiskValue (newVal, oldVal) {
+      // 添加风险值，最多同时显示10条
+      this.option1.series[0].data.push(this.newRiskValue)
+      if (this.option1.series[0].data.length > 10) {
+        this.option1.series[0].data.shift()
+      }
+    },
+    newRiskTime (newVal, oldVal) {
+      // 添加时间戳，最多同时显示10条
+      this.option1.xAxis.data.push(this.newRiskTime)
+      if (this.option1.xAxis.data.length > 10) {
+        this.option1.xAxis.data.shift()
+      }
+    },
+    newLink (newVal, oldVal) {
+      // 添加新攻击路径
+      this.option2.series[0].links.push(this.newLink)
+      if (this.option2.series[0].links.length > 15) {
+        this.option2.series[0].links.shift()
+      }
     }
   }
 }

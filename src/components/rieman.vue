@@ -4,35 +4,10 @@
       <span>黎曼流形计算</span>
     </div>
     <div class="zhangContent">
-      <span>黎曼流形详解</span>
+      <img src="../../static/introOfReiman.png">
     </div>
     <div class="zhangUpload">
-      <div class="uploadAndButton">
-        <el-upload
-          drag
-          show-file-list
-          action=""
-          multiple
-          accept="xls,xlsx,xlsm,csv,mp4"
-          :http-request="fileget"
-          class="uploadBox"
-        >
-          <i class="el-icon-upload"></i>
-          <div class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
-        </el-upload>
-        <div class="buttonBox">
-          <el-button
-            class="caculateBtn"
-            type="primary"
-            v-show="isCalcBtnShow"
-            :disabled="isCalcBtnDisabled"
-            @click="handleCalc"
-          >
-            {{ buttonText }}
-          </el-button>
-        </div>
-      </div>
-      <div>
+      <div class="labelSelectBox">
         <el-transfer
           v-model="checkedLabel"
           :data="calculateLabel"
@@ -40,21 +15,14 @@
           class="transferBox"
         >
         </el-transfer>
-<!--        <el-checkbox-group-->
-<!--          size="medium"-->
-<!--          v-model="checkedLabel"-->
-<!--          class="labelBox"-->
-<!--        >-->
-<!--          <el-checkbox-->
-<!--            border-->
-<!--            v-for="item in calculateLabel"-->
-<!--            :label="item"-->
-<!--            :key="item"-->
-<!--            class="calLabel"-->
-<!--          >-->
-<!--            {{item}}-->
-<!--          </el-checkbox>-->
-<!--        </el-checkbox-group>-->
+        <el-button
+          class="caculateBtn"
+          type="primary"
+          :loading="isCalcBtnLoading"
+          @click="handleCalc"
+        >
+          {{ buttonText }}
+        </el-button>
       </div>
     </div>
   </el-card>
@@ -65,54 +33,16 @@ export default {
   name: 'upload',
   data () {
     return {
-      file: null,
-	    param: null,
       calculateLabel: [],
       checkedLabel: [],
-      buttonText: '计算',
-      isCalcBtnShow: false,
-      isCalcBtnDisabled: false,
+      buttonText: '等待数据输入',
+      isCalcBtnLoading: true,
       filePath: ''
     }
   },
   methods: {
-    fileget(e){
-      this.file = e.file;
-      this.param = new FormData();
-      this.param.append('pic_file',this.file, this.file.name);
-      // console.log(this.file)
-      axios({
-        method: 'post',
-        url: 'http://127.0.0.1:5000/upload',
-        headers: {'Content-Type': 'multipart/form-data'},
-        data: this.param
-      }).then((res)=>{
-        // console.log(res)
-        this.filePath = res.data.path
-        // this.calculateLabel = res.data.labels
-        for (let i = 1; i <= res.data.labels.length; i++) {
-          this.calculateLabel.push({
-            key: i,
-            label: res.data.labels[i - 1],
-            disabled: false
-          })
-        }
-        for (let i = 1; i <= res.data.selectLabels.length; i++) {
-          let tmpLabel = res.data.selectLabels[i - 1]
-          for (let j = 1; j <= res.data.labels.length; j++) {
-            if (tmpLabel === res.data.labels[j - 1]) {
-              this.checkedLabel.push(j)
-              break
-            }
-          }
-        }
-        this.isCalcBtnShow = true
-      }).catch(function (error) {
-        console.log(error)
-      })
-    },
     handleCalc () {
-      this.isCalcBtnDisabled = true
+      this.isCalcBtnLoading = true
       this.buttonText = '计算中，请稍候...'
       // console.log(this.checkedLabel)
       let axiosLabel = []
@@ -128,8 +58,8 @@ export default {
           filePath: this.filePath,
           checkedLabels: axiosLabel
         }
-      }).then((res)=>{
-        console.log(res)
+      }).then((res) => {
+        // console.log(res)
         this.$router.push({
           name: 'graph',
           params: {
@@ -142,8 +72,33 @@ export default {
       })
     }
   },
-  created () {
-
+  mounted () {
+    // 尝试从vuex读取数据
+    if (this.$store.state.labels.length !== 0 && this.$store.state.selectLabels.length !== 0 && this.$store.state.filePath !== '') {
+      // 添加文件路径
+      this.filePath = this.$store.state.filePath
+      // 添加所有标签
+      this.calculateLabel = this.$store.state.labels.map((item, index) => {
+        return {
+          key: index + 1,
+          label: item,
+          disabled: false
+        }
+      })
+      // 加入推荐的标签到已选择标签
+      for (let i = 1; i <= this.$store.state.selectLabels.length; i++) {
+        let tmpLabel = this.$store.state.selectLabels[i - 1]
+        for (let j = 1; j <= this.$store.state.labels.length; j++) {
+          if (tmpLabel === this.$store.state.labels[j - 1]) {
+            this.checkedLabel.push(j)
+            break
+          }
+        }
+      }
+      // 改变显示按钮状态
+      this.isCalcBtnLoading = false
+      this.buttonText = '开始计算'
+    }
   }
 }
 </script>
@@ -168,26 +123,14 @@ export default {
     /*justify-content: space-between;*/
     align-items: start;
   }
-  .labelBox {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-  }
-  .uploadBox {
-    margin-bottom: 20px;
-  }
-  .calLabel {
-    margin: 10px;
-  }
-  .uploadAndButton {
-    display: flex;
-    flex-direction: row;
-  }
-  .buttonBox {
-    margin: 20px;
-    /*border: 1px solid red;*/
-  }
   .caculateBtn {
-    margin-top: 120px;
+    height: 40px;
+    margin-left: 50px;
+  }
+  .labelSelectBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: flex-end;
   }
 </style>
