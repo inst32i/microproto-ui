@@ -83,14 +83,19 @@ export default {
               gravity: 0,
               edgeLength: 50
             },
-            symbol: 'image://../../static/btn_host.png',
+            // symbol: 'image://../../static/btn_host.png',
+            symbol: 'circle',
             data: [],
             links: [],
             roam: true,
             lineStyle: {
               color: 'red',
               width: 2,
-              opacity: 0.3
+              opacity: 1
+            },
+            itemStyle: {
+              color: 'green',
+              opacity: 0.5
             }
           }
         ]
@@ -127,7 +132,7 @@ export default {
             id: i,
             name: this.$route.params.ipLoc[i][0],
             value: this.$route.params.ipLoc[i][1],
-            symbolSize: 15
+            symbolSize: 8
           })
         }
       }
