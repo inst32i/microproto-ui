@@ -1,6 +1,6 @@
 <template>
   <div>
-    <iframe src="http://localhost:8000/input" width="100%" height="800px" class="iframeStyle"></iframe>
+    <iframe src="http://localhost:8000/input" width="100%" height="800px" class="iframeStyle" scrolling="no"></iframe>
     <div class="upload">
       <div class="tips">上传行为数据</div>
       <el-upload
@@ -69,15 +69,17 @@ export default {
   }
 
   .tips {
+    margin-top: -80px;
     display: flex;
     flex-direction: row;
     justify-content: flex-start;
-    background-color: #C5D1C3;
-    font-size: 30px;
-    font-weight: bold;
+    background-color: #DFF0D8;
+    font-size: 36px;
     color: black;
-    width: 822px;
+    width: 65%;
     margin-bottom: 20px;
+    //font-family: "黑体";
+    font-weight: 500;
   }
 
   .uploadFrame {
@@ -85,7 +87,8 @@ export default {
   }
 
   /deep/.uploadFrame .el-upload-dragger {
-    width: 800px !important;
+    width: 1150px !important;
+    height: 280px !important;
     margin: 10px;
     display: flex;
     justify-content: center;
